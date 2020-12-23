@@ -244,14 +244,18 @@ def add_features(price_minute_df,price_daily_df,ticker_output,features_list):
     price_minute_df = price_minute_df.drop(columns=['Date'])
     price_daily_df = price_daily_df.drop(columns=['Date'])
 
-    #CD 12/2020 Add feature scaling, use min-max scaling to keep values between 0 and 1
+    #CD 12/2020 Add feature scaling, use min-max scaling to keep values between 0 and 1\
+    drop_columns = []
     for column in input_data.columns:
         if (column != 'datetime') & (column != 'Date') & (column != 'Bias'):
             input_data[column] = (input_data[column]-input_data[column].min())/(input_data[column].max()-input_data[column].min())
 
             #CD 12/2020 Remove features that contain only NaN rows. Ex: volume data for SPX, NDX, or DJX
             if input_data[column].isnull().all():
-                input_data.drop(columns=column,inplace=True)
+                drop_columns.append(column)
+
+    input_data.drop(columns=drop_columns,inplace=True)
+
     return input_data
     
 

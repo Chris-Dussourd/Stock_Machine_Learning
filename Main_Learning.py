@@ -49,12 +49,12 @@ def stock_machine_learning(price_minute_df,price_daily_df,ticker_output,predict_
     #Create the output_data_df that the algorithm is trying to predict
     if predict_periodType == 'minute':
         #Shift the close price data for the output ticker back by predict_period minutes
-        output_data_df = input_data_df['close_'+ticker_output].shift(periods=-predict_period).reset_index().drop(columns='index')
+        output_data_df = input_data_df['close_'+ticker_output].shift(periods=-predict_period).reset_index(drop=True)
     elif predict_periodType == 'day':
         #Find number of minute data points are in one day (Should be 781 - 13 hours of regular+extended hours trading + final minute)
         minutes_inday = len(input_data_df[input_data_df['Date']==input_data_df.loc[0,'Date']]) 
         #Shift the close price data for the output ticker back by predict_period days 
-        output_data_df = input_data_df['close_'+ticker_output].shift(periods=-(predict_period*minutes_inday)).reset_index().drop(columns='index')
+        output_data_df = input_data_df['close_'+ticker_output].shift(periods=-(predict_period*minutes_inday)).reset_index(drop=True)
     else:
         raise ValueError("This algorithm only support predict period types of 'day' and 'minute.'")
 
@@ -408,7 +408,7 @@ if __name__=="__main__":
     predict_periodType = 'day' #only 'minute' or 'day' supported  
 
     features_list = features_list = ['close1min','close2min','close5min','close10min','close30min','close1hr','DiffHighLow','SMA5','SMA10','SMA20',\
-            'SMA50','EMA5','EMA10','EMA20','EMA50','Boll20','Boll50','MACDline','SignalLine','MACDhist','RSI','Stochastic%K','Stockastic%K-%D']
+            'SMA50','EMA5','EMA10','EMA20','EMA50','Boll20','Boll50','MACDline','SignalLine','MACDhist','RSI','Stochastic%K','Stochastic%K-%D']
 
     algorithm = 'Neural Network'
 
